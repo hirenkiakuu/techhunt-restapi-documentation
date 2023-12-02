@@ -1,0 +1,189 @@
+openapi: 3.0.0
+info: 
+  title: techunt - сайт-агрегатор it-мероприятий
+  version: "1.0"
+servers: 
+  - url: http://localhost:3000/api/v1.0/
+    description: Dev server
+paths:
+  /events:
+    get:
+      summary: Метод получения списка ивентов
+      tags:
+        - Events
+      operationId: getAllEvents
+      responses:
+        '200': 
+          description: Успешный ответ со списком ивентов
+          content: 
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Events'
+        'default':
+          description: No description provided
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+  /events/{event_id}:
+    get:
+      summary: Метод получения конкретного ивента
+      tags:
+        - Events
+      operationId: getEventById
+      parameters: 
+        - name: event_id
+          in: path
+          required: true
+          description: Идентификатор ивента
+          schema:
+            type: string
+          example: 1
+      responses:
+        '200': 
+          description: Успешный ответ с одним ивентом
+          content: 
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Event'
+        'default':
+          description: No description provided
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Метод удаления ивента по идентификатору
+      tags:
+        - Events
+      operationId: deleteEventById
+      parameters: 
+        - name: event_id
+          in: path
+          required: true
+          description: Идентификатор ивента
+          schema:
+            type: string
+          example: 1  
+      responses: 
+        '200': 
+          description: Успешное удаление
+          content: 
+            application/json: {}
+        'default':
+          description: No description provided
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        
+  /events/newevent: 
+    post:
+      summary: Метод добавления ивента
+      tags: 
+        - Events
+      operationId: createEvent
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '201': 
+          description: Успешный ответ с созданным ивентом
+          content: 
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Events'
+        'default':
+          description: No description provided
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+  /auth:
+    get:
+      summary: Получение юзеров
+      tags:
+        - Users
+      responses: 
+        'default':
+          description: No description provided
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+      
+    
+              
+
+components: 
+  schemas: 
+    Event:
+      type: object
+      required: 
+        - event_title
+        - event_description
+        - event_organizer_id
+        - event_startdate
+        - event_enddate
+        - event_address
+        - event_platform
+      properties: 
+        event_id:
+          type: number
+          example: 1
+        event_title:
+          type: string
+          example: Бэкэнд фестиваль
+        event_description:
+          type: string
+          example: Соревнование для разработчиков бэкенда, где они могут продемонстрировать свои навыки в решении сложных технических задач.
+        event_organizer_id:
+          type: number
+          example: 1
+        event_startdate:
+          type: string
+          format: 2023-03-01T19:00:00.000Z
+        event_enddate:
+          type: string
+          format: 2023-03-03T19:00:00.000Z
+        event_address:
+          type: string
+          example: Екатеринбург, ул. Техническая, 45
+        event_platform:
+          type: string
+          example: online
+    Error: 
+      type: object
+      required:
+        - statuscode
+        - message
+      properties:
+        statuscode: 
+          type: integer
+        message: 
+          type: string
+     
+    Events:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Event'
+    
+      
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+  
